@@ -28,11 +28,7 @@
                     {
                         callback(new Error('用户名格式不正确'));
                     } else {
-                        if (value < 18) {
-                            callback(new Error('必须年满18岁'));
-                        } else {
                             callback();
-                        }
                     }
                 }, 1000);
             };

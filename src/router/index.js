@@ -6,6 +6,7 @@ import Test from '../pages/test.vue'
 import Home from '../pages/Home.vue'
 import Welcome from '../components/welcome.vue'
 import PlayerList from '../components/player/playerList.vue'
+import AdminList from '../components/adminList.vue'
 
 Vue.use(VueRouter);
 
@@ -45,6 +46,14 @@ let router = new VueRouter({
                     path:'/PlayerList',
                     name:'玩家列表页',
                     component:PlayerList,
+                    meta:{
+                        needLogin:true
+                    },
+                },
+                {
+                    path:'/AdminList',
+                    name:'管理员列表页',
+                    component:AdminList,
                     meta:{
                         needLogin:true
                     },

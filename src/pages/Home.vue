@@ -38,7 +38,7 @@
                                     <span>系通设置</span>
                                 </template>
                                 <el-menu-item-group>
-                                    <el-menu-item index="/PlayerList">管理员列表</el-menu-item>
+                                    <el-menu-item index="/AdminList">管理员列表</el-menu-item>
                                     <el-menu-item index="/PlayerList">个人信息</el-menu-item>
                                     <el-menu-item index="/PlayerList">修改密码</el-menu-item>
                                 </el-menu-item-group>

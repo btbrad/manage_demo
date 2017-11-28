@@ -54,6 +54,15 @@ export default {
                     resolve([200,{code:200,msg:'修改成功！'}])
                 },500)
             })
-        })
+        });
+
+        mock.onGet('/api/AdminList').reply(config =>{
+            let mockAdmins = Admin;
+            return new Promise((resolve,reject) =>{
+                setTimeout(() =>{
+                    resolve([200,{Admins:mockAdmins}]);
+                },200);
+            });
+        });
     }
 }

@@ -7,3 +7,7 @@ export const reqLogin = params =>{
 export const getPlayerList = params =>{
     return axios.get('/api/PlayerList',{ params:params });
 };
+
+export const reqChangePW = params =>{
+    return axios.get('/api/changePW',params).then(res => res.data);
+};

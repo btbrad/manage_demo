@@ -37,5 +37,23 @@ export default {
                 },200);
             });
         });
+
+        mock.onGet('/api/changePW').reply(config =>{
+            console.log(config);
+            let {id,username,password} = config;
+            PlayerList.some(u =>{
+                if((u.id===id)&&(u.username===username)){
+                    u.password=password;
+                    return true;
+                }else{
+                    return false;
+                }
+            })
+            return new Promise((resolve,reject) =>{
+                setTimeout(()=>{
+                    resolve([200,{code:200,msg:'修改成功！'}])
+                },500)
+            })
+        })
     }
 }

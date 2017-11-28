@@ -8,7 +8,7 @@
             <el-input type="password" v-model="loginForm.password" auto-complete="off"></el-input>
         </el-form-item>
         <el-form-item>
-            <el-button type="primary" @click="submitForm('loginForm')">登录</el-button>
+            <el-button type="primary" @click="submitForm('loginForm')" v-loading.fullscreen.lock="fullscreenLoading">登录</el-button>
         </el-form-item>
 	</el-form>
 </template>
@@ -37,6 +37,7 @@
                     username:'',
                     password:'',
 				},
+                fullscreenLoading: false,
                 rules:{
                     username: [
                         { required: true,validator: checkUsername, trigger: 'blur' }
@@ -49,13 +50,11 @@
 		},
         methods:{
             submitForm(formName) {
+                this.fullscreenLoading = true;
                 this.$refs[formName].validate((valid) => {
                     if (valid) {
-                        alert('submit!');
                         let loginParams = {username:this.loginForm.username,password:this.loginForm.password};
-                        console.log(loginParams);
                         reqLogin(loginParams).then(data =>{
-                            console.log(data);
                             let {msg,code,admin} = data;
                             if(code!==200){
                                 this.$message({
@@ -65,7 +64,7 @@
                             }else {
                                 sessionStorage.setItem('access-user',JSON.stringify(admin));
                                 console.log('login success');
-                                this.$router.push({ path:'/' });
+                                this.$router.push({ path:'/index' });
                             }
                         })
                     } else {

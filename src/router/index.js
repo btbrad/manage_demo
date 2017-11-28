@@ -4,6 +4,7 @@ import VueRouter from 'vue-router'
 import Login from '../pages/Login.vue'
 import Test from '../pages/test.vue'
 import Home from '../pages/Home.vue'
+import Welcome from '../components/welcome.vue'
 
 Vue.use(VueRouter);
 
@@ -30,6 +31,16 @@ let router = new VueRouter({
             meta:{
                 needLogin:true
             },
+            children:[
+                {
+                    path:'/index',
+                    name:'欢迎页',
+                    component:Welcome,
+                    meta:{
+                        needLogin:true
+                    },
+                }
+            ]
         },
     ]
 });

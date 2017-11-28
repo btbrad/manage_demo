@@ -23,21 +23,26 @@
                                     <span>系统首页</span>
                                 </template>
                             </el-menu-item>
-                            <el-submenu index="">
+                            <el-submenu index="2">
                                 <template slot="title">
                                     <i class="el-icon-menu"></i>
                                     <span>玩家管理</span>
                                 </template>
                                 <el-menu-item-group>
-                                    <el-menu-item index="/login">玩家列表</el-menu-item>
+                                    <el-menu-item index="/PlayerList">玩家列表</el-menu-item>
                                 </el-menu-item-group>
                             </el-submenu>
-                            <el-menu-item index="3">
+                            <el-submenu index="">
                                 <template slot="title">
                                     <i class="el-icon-setting"></i>
                                     <span>系通设置</span>
                                 </template>
-                            </el-menu-item>
+                                <el-menu-item-group>
+                                    <el-menu-item index="/PlayerList">管理员列表</el-menu-item>
+                                    <el-menu-item index="/PlayerList">个人信息</el-menu-item>
+                                    <el-menu-item index="/PlayerList">修改密码</el-menu-item>
+                                </el-menu-item-group>
+                            </el-submenu>
                         </el-menu>
                     </el-col>
                 </el-row>
@@ -75,10 +80,8 @@
                 });
             },
             handleOpen(key, keyPath) {
-                console.log(key, keyPath);
             },
             handleClose(key, keyPath) {
-                console.log(key, keyPath);
             },
         },
         mounted() {

@@ -2,6 +2,7 @@ import axios from 'axios'
 import MockAdapter from 'axios-mock-adapter'
 
 import {Admin} from './data/user'
+import {PlayerList} from './data/Player'
 
 export default {
     start(){
@@ -26,6 +27,15 @@ export default {
                     }
                 },1000)
             })
-        })
+        });
+
+        mock.onGet('/api/PlayerList').reply(config =>{
+            let mockPlayers = PlayerList;
+            return new Promise((resolve,reject) =>{
+                setTimeout(() =>{
+                    resolve([200,{players:mockPlayers}]);
+                },200);
+            });
+        });
     }
 }

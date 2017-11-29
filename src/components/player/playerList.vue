@@ -1,4 +1,5 @@
 <template>
+    <div>
     <el-table :data="tableData" border style="width: 100%">
         <el-table-column label="ID" width="180" prop="id"></el-table-column>
         <el-table-column label="用户名" width="180" prop="username"></el-table-column>
@@ -10,6 +11,7 @@
             </template>
         </el-table-column>
     </el-table>
+    </div>
 </template>
 
 <script>
@@ -27,6 +29,7 @@ export default {
     },
     methods:{
         changePW(row){
+            console.log(row);
             this.$confirm('确认更改此玩家的密码？','提示',{
                 confirmButtonText: '确定',
                 cancelButtonText: '取消',
@@ -75,7 +78,6 @@ export default {
         getPlayers(){
             getPlayerList({}).then(res =>{
                 console.log(res);
-                sessionStorage.setItem("PlayerList",res.data.players);
                 this.tableData = res.data.players;
             })
         },

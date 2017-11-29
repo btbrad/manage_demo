@@ -38,9 +38,8 @@
                                     <span>系通设置</span>
                                 </template>
                                 <el-menu-item-group>
-                                    <el-menu-item index="/AdminList">管理员列表</el-menu-item>
-                                    <el-menu-item index="/PlayerList">个人信息</el-menu-item>
-                                    <el-menu-item index="/PlayerList">修改密码</el-menu-item>
+                                    <el-menu-item v-if="this.UserType==='超级管理员'" index="/AdminList">管理员列表</el-menu-item>
+                                    <el-menu-item index="/adminProfile">个人信息</el-menu-item>
                                 </el-menu-item-group>
                             </el-submenu>
                         </el-menu>
@@ -60,6 +59,7 @@
         data() {
             return {
                 username: '',
+                UserType:'',
             }
         },
         methods: {
@@ -90,6 +90,8 @@
                     admin = JSON.parse(admin);
                 }
                 this.username = admin.username;
+                this.UserType = admin.type;
+                console.log(this.UserType);
             }
         }
 </script>
@@ -114,6 +116,7 @@
         color: #333;
         text-align: center;
         line-height: 160px;
+        min-height: 800px;
     }
 
     body > .el-container {

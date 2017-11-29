@@ -7,6 +7,7 @@ import Home from '../pages/Home.vue'
 import Welcome from '../components/welcome.vue'
 import PlayerList from '../components/player/playerList.vue'
 import AdminList from '../components/adminList.vue'
+import AdminProfile from '../components/adminProfile.vue'
 
 Vue.use(VueRouter);
 
@@ -54,6 +55,14 @@ let router = new VueRouter({
                     path:'/AdminList',
                     name:'管理员列表页',
                     component:AdminList,
+                    meta:{
+                        needLogin:true
+                    },
+                },
+                {
+                    path:'/adminProfile',
+                    name:'管理员个人信息页',
+                    component:AdminProfile,
                     meta:{
                         needLogin:true
                     },

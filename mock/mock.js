@@ -1,4 +1,5 @@
 import axios from 'axios'
+import Mock from 'mockjs'
 import MockAdapter from 'axios-mock-adapter'
 
 import {Admin} from './data/user'
@@ -16,6 +17,7 @@ export default {
                     let hasAdmin = Admin.some(u =>{
                         if(u.username===username && u.password === password){
                             admin = JSON.parse(JSON.stringify(u));
+                            // sessionStorage里不存密码
                             delete admin.password;
                             return true
                         }
@@ -48,7 +50,7 @@ export default {
                 }else{
                     return false;
                 }
-            })
+            });
             return new Promise((resolve,reject) =>{
                 setTimeout(()=>{
                     resolve([200,{code:200,msg:'修改成功！'}])
@@ -64,5 +66,41 @@ export default {
                 },200);
             });
         });
+
+        mock.onGet('/api/changeProfile').reply(config =>{
+            console.log(config);
+            let {id,username,password,type} = config;
+            Admin.some(u =>{
+                if(u.id===id){
+                    u.username=username;
+                    u.password=password;
+                    u.type=type;
+                    return true;
+                }else{
+                    return false;
+                }
+            });
+            return new Promise((resolve,reject) =>{
+                setTimeout(()=>{
+                    resolve([200,{code:200,msg:'修改成功！'}])
+                },500)
+            })
+        });
+
+        mock.onPost('/api/addUser').reply(config => {
+            let arg = JSON.parse(config.data);
+            console.log(config);
+            Admin.push({
+                id: Mock.Random.guid(),
+                username:arg.username,
+                password:arg.password,
+                type:arg.type
+            });
+            return new Promise((resolve, reject) => {
+                setTimeout(() => {
+                    resolve([200,{code:200,msg:'新增成功！'}]);
+                }, 200);
+            });
+        });
     }
-}
+};

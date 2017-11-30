@@ -8,6 +8,7 @@ import Welcome from '../components/welcome.vue'
 import PlayerList from '../components/player/playerList.vue'
 import AdminList from '../components/adminList.vue'
 import AdminProfile from '../components/adminProfile.vue'
+import ChangePassword from '../components/changePassword.vue'
 
 Vue.use(VueRouter);
 
@@ -63,6 +64,14 @@ let router = new VueRouter({
                     path:'/adminProfile',
                     name:'管理员个人信息页',
                     component:AdminProfile,
+                    meta:{
+                        needLogin:true
+                    },
+                },
+                {
+                    path:'/changePassword',
+                    name:'管理员修改密码页',
+                    component:ChangePassword,
                     meta:{
                         needLogin:true
                     },

@@ -32,6 +32,19 @@
                     }
                 }, 1000);
             };
+            var checkPassword = (rule, value, callback) => {
+                if (!value) {
+                    return callback(new Error('密码不能为空'));
+                }
+                setTimeout(() => {
+                    if(!/^\w{6,}$/g.test(value))
+                    {
+                        callback(new Error('密码不能低于6位'));
+                    } else {
+                        callback();
+                    }
+                }, 1000);
+            };
 			return{
                 loginForm:{
                     username:'',
@@ -43,7 +56,7 @@
                         { required: true,validator: checkUsername, trigger: 'blur' }
                     ],
                     password: [
-                        { required: true, message: '请输入密码', trigger: 'blur' },
+                        { required: true, validator: checkPassword, trigger: 'blur' },
                     ],
                 }
 			}
@@ -54,11 +67,14 @@
                 this.$refs[formName].validate((valid) => {
                     if (valid) {
                         let loginParams = {username:this.loginForm.username,password:this.loginForm.password};
+                        console.log(loginParams);
                         reqLogin(loginParams).then(data =>{
+                            console.log(data);
                             let {msg,code,admin} = data;
                             if(code!==200){
+                                this.fullscreenLoading = false;
                                 this.$message({
-                                    message:msg,
+                                    message:'密码错误',
                                     type:'error'
                                 })
                             }else {

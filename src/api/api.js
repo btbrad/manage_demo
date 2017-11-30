@@ -23,3 +23,15 @@ export const reqChangeProfile = params =>{
 export const addAdmin = params =>{
   return axios.post('/api/addUser',params).then(res => res.data)
 };
+
+export const reqChangeAdminPW = params =>{
+    return axios.get('/api/changeAdminPW',params).then(res => res.data);
+};
+
+export const reqChangeAdminProfile = params =>{
+    return axios.get('/api/changeAdminProfile',params).then(res => res.data);
+};
+
+export const reqUserType = params =>{
+    return axios.post('/api/getUserType',params).then(res => res.data);
+};

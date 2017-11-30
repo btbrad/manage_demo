@@ -74,7 +74,9 @@ export default {
                 if(u.id===id){
                     u.username=username;
                     u.password=password;
-                    u.type=type;
+                    if(type!==''){
+                        u.type=type;
+                    }
                     return true;
                 }else{
                     return false;
@@ -102,5 +104,63 @@ export default {
                 }, 200);
             });
         });
+
+        mock.onGet('/api/changeAdminPW').reply(config =>{
+            console.log(config);
+            let  id = config.id;
+            let username = config.username;
+            let newPassword = config.newPassword;
+            Admin.some(u =>{
+                if((u.id===id)&&(u.username===username)){
+                    u.password=newPassword;
+                    console.log(u);
+                    return true;
+                }else{
+                    return false;
+                }
+            });
+            return new Promise((resolve,reject) =>{
+                setTimeout(()=>{
+                    resolve([200,{code:200,msg:'修改成功！'}])
+                },500)
+            })
+        });
+
+        mock.onGet('/api/changeAdminProfile').reply(config =>{
+            console.log(config);
+            let {id,username,email} = config;
+            Admin.some(u =>{
+                if((u.id===id)&&(u.username=username)){
+                    u.email = email;
+                    return true;
+                }else{
+                    return false;
+                }
+            });
+            return new Promise((resolve,reject) =>{
+                setTimeout(()=>{
+                    resolve([200,{code:200,msg:'修改成功！'}])
+                },500)
+            })
+        });
+
+        mock.onPost('/api/getUserType').reply(arg =>{
+            let {id,username} = JSON.parse(arg.data);
+            return new Promise((resolve,reject) =>{
+                let UserType = null;
+                setTimeout(() =>{
+                    let hasAdmin = Admin.some(u =>{
+                        if(u.username===username && u.id === id){
+                                UserType = u.type;
+                                return true
+                        }
+                    });
+                    if(hasAdmin){
+                        resolve([200, {code: 200, msg: '请求成功',UserType}])
+                    }
+                },1000)
+            })
+        });
+
     }
 };

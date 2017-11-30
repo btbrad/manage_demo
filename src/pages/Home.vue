@@ -38,8 +38,9 @@
                                     <span>系通设置</span>
                                 </template>
                                 <el-menu-item-group>
-                                    <el-menu-item v-if="this.UserType==='超级管理员'" index="/AdminList">管理员列表</el-menu-item>
+                                    <el-menu-item v-if="isSuperAdmin" index="/AdminList">管理员列表</el-menu-item>
                                     <el-menu-item index="/adminProfile">个人信息</el-menu-item>
+                                    <el-menu-item index="/changePassword">修改密码</el-menu-item>
                                 </el-menu-item-group>
                             </el-submenu>
                         </el-menu>
@@ -54,12 +55,16 @@
 </template>
 
 <script>
+    import {reqUserType} from '../api/api'
+
     export default {
         name: 'Home',
         data() {
             return {
+                id:'',
                 username: '',
                 UserType:'',
+                isSuperAdmin:false,
             }
         },
         methods: {
@@ -83,15 +88,30 @@
             },
             handleClose(key, keyPath) {
             },
+            checkSuperAdmin(){
+                let id = this.id;
+                let username = this.username;
+                let params = {id,username};
+                reqUserType(params).then((res) =>{
+                    console.log(res);
+                    let {code} = res;
+                    if(code===200){
+                        let Type = res.UserType;
+                        if(Type==="超级管理员"){
+                            this.isSuperAdmin = true;
+                        }
+                    }
+                })
+            }
         },
         mounted() {
                 let admin = sessionStorage.getItem('access-user');
                 if (admin) {
                     admin = JSON.parse(admin);
                 }
+                this.id = admin.id;
                 this.username = admin.username;
-                this.UserType = admin.type;
-                console.log(this.UserType);
+                this.checkSuperAdmin();
             }
         }
 </script>

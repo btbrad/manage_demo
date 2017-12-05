@@ -10,7 +10,7 @@
             <el-input v-model="pwform.confirmPassword" auto-complete="off"></el-input>
         </el-form-item>
         <el-form-item>
-            <el-button type="primary" @click="submitForm('pwform')">保存</el-button>
+            <el-button type="primary" @click="submitForm('pwform')">确认修改</el-button>
         </el-form-item>
     </el-form>
 </template>

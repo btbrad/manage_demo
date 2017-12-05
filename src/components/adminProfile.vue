@@ -69,6 +69,7 @@ export default {
             admin = JSON.parse(admin);
         }
         this.AdminProfileForm = admin;
+
     }
 }
 </script>

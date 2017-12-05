@@ -10,7 +10,9 @@ export default {
         let mock = new MockAdapter(axios);
 
         mock.onPost('/api/login').reply(arg =>{
+            console.log(arg);
             let {username,password} = JSON.parse(arg.data);
+            console.log(username,password);
             return new Promise((resolve,reject) =>{
                 let admin = null;
                 setTimeout(() =>{
@@ -19,9 +21,10 @@ export default {
                             admin = JSON.parse(JSON.stringify(u));
                             // sessionStorage里不存密码
                             delete admin.password;
+                            delete admin.type;
                             return true
                         }
-                    })
+                    });
                     if(hasAdmin){
                         resolve([200, {code: 200, msg: '请求成功', admin}])
                     }else{
@@ -69,14 +72,13 @@ export default {
 
         mock.onGet('/api/changeProfile').reply(config =>{
             console.log(config);
-            let {id,username,password,type} = config;
+            let {id,username,password,type,email} = config;
             Admin.some(u =>{
                 if(u.id===id){
                     u.username=username;
                     u.password=password;
-                    if(type!==''){
-                        u.type=type;
-                    }
+                    u.type=type;
+                    u.email = email
                     return true;
                 }else{
                     return false;
@@ -96,7 +98,8 @@ export default {
                 id: Mock.Random.guid(),
                 username:arg.username,
                 password:arg.password,
-                type:arg.type
+                type:arg.type,
+                email:arg.email,
             });
             return new Promise((resolve, reject) => {
                 setTimeout(() => {

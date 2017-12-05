@@ -2,10 +2,10 @@
 	<el-form :model="loginForm" :rules="rules" status-icon ref="loginForm" label-width="100px" class="loginForm demo-ruleForm">
         <h1>欢  迎</h1>
 		<el-form-item label="用户名" prop="username">
-			<el-input type="text" v-model="loginForm.username"></el-input>
+			<el-input type="text" v-model="loginForm.username" id="username"></el-input>
 		</el-form-item>
         <el-form-item label="密  码" prop="password">
-            <el-input type="password" v-model="loginForm.password" auto-complete="off"></el-input>
+            <el-input type="password" v-model="loginForm.password" auto-complete="off" id="password"></el-input>
         </el-form-item>
         <el-form-item>
             <el-button type="primary" @click="submitForm('loginForm')" v-loading.fullscreen.lock="fullscreenLoading">登录</el-button>
@@ -66,25 +66,34 @@
                 this.fullscreenLoading = true;
                 this.$refs[formName].validate((valid) => {
                     if (valid) {
-                        let loginParams = {username:this.loginForm.username,password:this.loginForm.password};
-                        console.log(loginParams);
-                        reqLogin(loginParams).then(data =>{
-                            console.log(data);
-                            let {msg,code,admin} = data;
-                            if(code!==200){
-                                this.fullscreenLoading = false;
-                                this.$message({
-                                    message:'密码错误',
-                                    type:'error'
-                                })
-                            }else {
-                                sessionStorage.setItem('access-user',JSON.stringify(admin));
-                                console.log('login success');
-                                this.$router.push({ path:'/index' });
-                            }
+//                        let loginParams = {username:this.loginForm.username,password:this.loginForm.password};
+//                        console.log(loginParams);
+//                        reqLogin(loginParams).then(data =>{
+//                            console.log(data);
+//                            let {msg,code,admin} = data;
+//                            if(code!==200){
+//                                this.fullscreenLoading = false;
+//                                this.$message({
+//                                    message:'密码错误',
+//                                    type:'error'
+//                                })
+//                            }else {
+//                                sessionStorage.setItem('access-user',JSON.stringify(admin));
+//                                console.log('login success');
+//                                this.$router.push({ path:'/index' });
+//                            }
+//                        })
+                        this.$store.dispatch('Login',this.loginForm).then((res) =>{
+                            this.$router.push({path:'/index'});
+                            this.$message({
+                                type: 'success',
+                                message: '登录成功跳转到首页...'
+                            });
+                            this.fullscreenLoading = false;
                         })
                     } else {
                         console.log('error submit!!');
+                        this.fullscreenLoading = false;
                         return false;
                     }
                 });

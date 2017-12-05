@@ -9,7 +9,6 @@
 		name:'App',
 		data(){
 			return{
-
 			}
 		}
 	}

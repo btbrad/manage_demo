@@ -9,46 +9,50 @@
         </el-header>
         <el-container>
             <el-aside width="200px">
-                <el-row>
-                    <el-col :span="24">
-                        <el-menu
-                                router
-                                default-active="2"
-                                class="el-menu-vertical-demo"
-                                @open="handleOpen"
-                                @close="handleClose">
-                            <el-menu-item index="/index">
-                                <template slot="title">
-                                    <i class="el-icon-location"></i>
-                                    <span>系统首页</span>
-                                </template>
-                            </el-menu-item>
-                            <el-submenu index="2">
-                                <template slot="title">
-                                    <i class="el-icon-menu"></i>
-                                    <span>玩家管理</span>
-                                </template>
-                                <el-menu-item-group>
-                                    <el-menu-item index="/PlayerList">玩家列表</el-menu-item>
-                                </el-menu-item-group>
-                            </el-submenu>
-                            <el-submenu index="">
-                                <template slot="title">
-                                    <i class="el-icon-setting"></i>
-                                    <span>系通设置</span>
-                                </template>
-                                <el-menu-item-group>
-                                    <el-menu-item v-if="isSuperAdmin" index="/AdminList">管理员列表</el-menu-item>
-                                    <el-menu-item index="/adminProfile">个人信息</el-menu-item>
-                                    <el-menu-item index="/changePassword">修改密码</el-menu-item>
-                                </el-menu-item-group>
-                            </el-submenu>
-                        </el-menu>
-                    </el-col>
-                </el-row>
+                <!--<el-row>-->
+                    <!--<el-col :span="24">-->
+                        <!--<el-menu-->
+                                <!--router-->
+                                <!--default-active="2"-->
+                                <!--class="el-menu-vertical-demo"-->
+                                <!--@open="handleOpen"-->
+                                <!--@close="handleClose">-->
+                            <!--<el-menu-item index="/index">-->
+                                <!--<template slot="title">-->
+                                    <!--<i class="el-icon-location"></i>-->
+                                    <!--<span>系统首页</span>-->
+                                <!--</template>-->
+                            <!--</el-menu-item>-->
+                            <!--<el-submenu index="2">-->
+                                <!--<template slot="title">-->
+                                    <!--<i class="el-icon-menu"></i>-->
+                                    <!--<span>玩家管理</span>-->
+                                <!--</template>-->
+                                <!--<el-menu-item-group>-->
+                                    <!--<el-menu-item index="/PlayerList">玩家列表</el-menu-item>-->
+                                <!--</el-menu-item-group>-->
+                            <!--</el-submenu>-->
+                            <!--<el-submenu index="">-->
+                                <!--<template slot="title">-->
+                                    <!--<i class="el-icon-setting"></i>-->
+                                    <!--<span>系通设置</span>-->
+                                <!--</template>-->
+                                <!--<el-menu-item-group>-->
+                                    <!--<el-menu-item @click="checkSuperAdmin" :index="adminLink">管理员列表</el-menu-item>-->
+                                    <!--<el-menu-item index="/adminProfile">个人信息</el-menu-item>-->
+                                    <!--<el-menu-item index="/changePassword">修改密码</el-menu-item>-->
+                                <!--</el-menu-item-group>-->
+                            <!--</el-submenu>-->
+                        <!--</el-menu>-->
+                    <!--</el-col>-->
+                <!--</el-row>-->
+                <!--<el-tree :data="treeData" :props="defaultProps" @node-click="handleNodeClick"></el-tree>-->
+                <my-nav></my-nav>
             </el-aside>
             <el-main>
-                <router-view></router-view>
+                <keep-alive>
+                    <router-view></router-view>
+                </keep-alive>
             </el-main>
         </el-container>
     </el-container>
@@ -56,15 +60,44 @@
 
 <script>
     import {reqUserType} from '../api/api'
+    import Nav from './nav.vue'
 
     export default {
         name: 'Home',
+        components:{
+            myNav:Nav,
+        },
         data() {
             return {
                 id:'',
                 username: '',
                 UserType:'',
-                isSuperAdmin:false,
+                adminLink:'',
+                navList:[
+                    {
+                        label:'系统首页',
+                    },
+                    {
+                        label:'玩家管理',
+                        children:[{
+                            label:'玩家列表',
+                        }],
+                    },
+                    {
+                        label:'系统设置',
+                        children:[
+                            {
+                                label:'管理员列表',
+                             },
+                            {
+                                label:'个人信息',
+                            },
+                            {
+                                label:'修改密码',
+                            }
+                        ],
+                    }
+                ],
             }
         },
         methods: {
@@ -97,23 +130,29 @@
                     let {code} = res;
                     if(code===200){
                         let Type = res.UserType;
-                        if(Type==="超级管理员"){
-                            this.isSuperAdmin = true;
+                        if(Type==="super"){
+                            this.adminLink='/AdminList';
+                            return this.adminLink;
+                        }else {
+                            this.$message({
+                                type:'error',
+                                message:'没有权限'
+                            })
                         }
                     }
                 })
             }
         },
         mounted() {
-                let admin = sessionStorage.getItem('access-user');
-                if (admin) {
-                    admin = JSON.parse(admin);
-                }
-                this.id = admin.id;
-                this.username = admin.username;
-                this.checkSuperAdmin();
-            }
-        }
+//                let admin = sessionStorage.getItem('access-user');
+//                if (admin) {
+//                    admin = JSON.parse(admin);
+//                }
+//                this.id = admin.id;
+//                this.username = admin.username;
+                    this.username=this.$store.getters.username;
+            },
+    }
 </script>
 
 <style scoped>
@@ -132,10 +171,10 @@
     }
 
     .el-main {
-        background-color: #E9EEF3;
+        background-color: #fff;
         color: #333;
         text-align: center;
-        line-height: 160px;
+        line-height: 80px;
         min-height: 800px;
     }
 

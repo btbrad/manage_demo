@@ -1,16 +1,16 @@
 <template>
     <div>
         <div style="margin-top: 15px;">
-            <el-input placeholder="请输入内容" v-model="input5" class="input-with-select">
+            <el-input placeholder="请输入内容" v-model="keyWord" class="input-with-select">
                 <el-select v-model="selectValue" slot="prepend" placeholder="请选择" style="width: 100px;">
                     <el-option label="ID" value="id"></el-option>
                     <el-option label="用户名" value="username"></el-option>
                     <el-option label="性别" value="sex"></el-option>
                 </el-select>
-                <el-button slot="append" icon="el-icon-search"></el-button>
+                <el-button slot="append" icon="el-icon-search" @click="search()"></el-button>
             </el-input>
         </div>
-    <el-table :data="tableData" border height="800" fit style="width: 100%">
+    <el-table :data="tableData" border height="700" fit style="width: 100%">
         <el-table-column  fixed label="ID" width="180" prop="id" header-align="center"></el-table-column>
         <el-table-column  fixed label="用户名" width="180" prop="username" header-align="center"></el-table-column>
         <el-table-column label="性别" width="180" prop="sex" header-align="center"></el-table-column>
@@ -21,6 +21,16 @@
             </template>
         </el-table-column>
     </el-table>
+        <el-row>
+            <el-pagination
+                    @size-change="handleSizeChange"
+                    @current-change="handleCurrentChange"
+                    :page-sizes="[10, 20, 30, 50]"
+                    :page-size="10"
+                    layout="total, sizes, prev, pager, next, jumper"
+                    :total=this.total>
+            </el-pagination>
+        </el-row>
     </div>
 </template>
 
@@ -35,13 +45,24 @@ export default {
     data(){
         return{
             tableData:[],
-            input3: '',
-            input4: '',
-            input5: '',
-            selectValue: ''
+            keyWord: '',
+            selectValue: '',
+            total: 0,
+            page: 1,
+            size:10,
         }
     },
     methods:{
+        handleSizeChange(val) {
+            console.log(`每页 ${val} 条`);
+            this.size=val;
+            this.getPlayers();
+        },
+        handleCurrentChange(val) {
+            console.log(`当前页: ${val}`);
+            this.page = val;
+            this.getPlayers();
+        },
         changePW(row){
             console.log(row);
             this.$confirm('确认更改此玩家的密码？','提示',{
@@ -90,11 +111,26 @@ export default {
             });
         },
         getPlayers(){
-            getPlayerList({}).then(res =>{
+            let param = {
+                page:this.page,
+                size:this.size,
+                [this.selectValue]:this.keyWord,
+            };
+            getPlayerList(param).then(res =>{
                 console.log(res);
+                this.total=res.data.total;
                 this.tableData = res.data.players;
             })
         },
+        search(){
+//            let param={[this.selectValue]:this.keyWord};
+//            console.log(param);
+//            getPlayerList(param).then(res =>{
+//                console.log(res);
+//                this.tableData=res.data.players;
+//            })
+            this.getPlayers();
+        }
     }
 }
 </script>

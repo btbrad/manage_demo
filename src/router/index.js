@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
+import store from '../store/index'
 
 import Login from '../pages/Login.vue'
 import Test from '../pages/test.vue'
@@ -83,13 +84,16 @@ let router = new VueRouter({
 
 router.beforeEach((to,from,next) =>{
    if(to.meta.needLogin){
-       let admin = JSON.parse(window.sessionStorage.getItem('access-user'));
-       if(!admin){
+       let admin = store.getters.accessUser;
+        console.log(admin);
+       // let admin = JSON.parse(window.sessionzStorage.getItem('access-user'));
+       if((!admin)||(admin.id==='')||(admin.username==='')){
            next({path:'/login'})
        }
        next()
    }else{
-       window.sessionStorage.removeItem('access-user');
+       // window.sessionStorage.removeItem('access-user');
+       store.commit('updateAccessUser','');
        next()
    }
 });

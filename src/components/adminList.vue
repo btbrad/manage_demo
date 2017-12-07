@@ -212,10 +212,7 @@
             }
         },
         mounted() {
-            let admin = sessionStorage.getItem('access-user');
-            if (admin) {
-                admin = JSON.parse(admin);
-            }
+            let admin = this.$store.getters.accessUser;
             this.LoginUser = admin.username;
         },
     }

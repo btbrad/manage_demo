@@ -59,6 +59,7 @@
 </template>
 
 <script>
+    import {mapGetters} from 'vuex'
     import {reqUserType} from '../api/api'
     import Nav from './nav.vue'
 
@@ -70,7 +71,7 @@
         data() {
             return {
                 id:'',
-                username: '',
+//                username: '',
                 UserType:'',
                 adminLink:'',
                 navList:[
@@ -100,6 +101,11 @@
                 ],
             }
         },
+        computed:{
+            ...mapGetters([
+                'username',
+            ])
+        },
         methods: {
             onQuit() {
                 this.$confirm('退出登录?', '提示', {
@@ -107,8 +113,14 @@
                     cancelButtonText: '取消',
                     type: 'warning'
                 }).then(() => {
-                    window.sessionStorage.removeItem('access-user');
-                    console.log('清除session成功');
+//                    window.sessionStorage.removeItem('access-user');
+                    this.$store.dispatch('Logout').then(res =>{
+                        this.$message({
+                            type: 'success',
+                            message: '退出成功，正在跳转登录页面...'
+                        });
+                    });
+                    console.log('退出成功');
                     window.location.reload();
                 }).catch(() => {
                     this.$message({
@@ -143,15 +155,16 @@
                 })
             }
         },
-        mounted() {
+//        mounted() {
 //                let admin = sessionStorage.getItem('access-user');
 //                if (admin) {
 //                    admin = JSON.parse(admin);
 //                }
 //                this.id = admin.id;
 //                this.username = admin.username;
-                    this.username=this.$store.getters.username;
-            },
+//                    this.username=this.$store.getters.accessUser.username;
+//                    console.log(this.$store.getters.id);
+//            },
     }
 </script>
 

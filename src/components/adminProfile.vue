@@ -1,10 +1,10 @@
 <template>
-    <el-form :model="AdminProfileForm" :rules="rules" status-icon ref="AdminProfileForm" label-width="100px" class="demo-ruleForm">
+    <el-form :model="accessUser" :rules="rules" status-icon ref="AdminProfileForm" label-width="100px" class="demo-ruleForm">
         <el-form-item label="用户名" :label-width="formLabelWidth">
-            <el-input v-model="AdminProfileForm.username" auto-complete="off" :disabled="true"></el-input>
+            <el-input v-model="accessUser.username" auto-complete="off" :disabled="true"></el-input>
         </el-form-item>
         <el-form-item label="邮  箱" :label-width="formLabelWidth" prop="email">
-            <el-input v-model="AdminProfileForm.email" auto-complete="off"></el-input>
+            <el-input v-model="accessUser.email" auto-complete="off"></el-input>
         </el-form-item>
         <el-form-item>
             <el-button type="primary" @click="submitForm('AdminProfileForm')">确认更改</el-button>
@@ -13,18 +13,19 @@
 </template>
 
 <script>
+import {mapGetters} from 'vuex'
 import {reqLogin,reqChangeAdminProfile} from '../api/api'
 
 export default {
     name:'AdminProfile',
     data(){
         return{
-            AdminProfileForm: {
-                id:'',
-                username: '',
-                password: '',
-                email:'',
-            },
+//            AdminProfileForm: {
+//                id:'',
+//                username: '',
+//                password: '',
+//                email:'',
+//            },
             formLabelWidth:'200px',
             rules:{
                 email: [
@@ -34,13 +35,18 @@ export default {
             }
         }
     },
+    computed:{
+        ...mapGetters([
+                'accessUser'
+            ])
+    },
     methods:{
         submitForm(formName) {
             this.$refs[formName].validate((valid) => {
                 if (valid) {
-                    let id = this.AdminProfileForm.id;
-                    let username = this.AdminProfileForm.username;
-                    let email = this.AdminProfileForm.email;
+                    let id = this.accessUser.id;
+                    let username = this.accessUser.username;
+                    let email = this.accessUser.email;
                     let params = {id,username,email};
                     reqChangeAdminProfile(params).then((res) =>{
                         let {code} = res;
@@ -64,11 +70,13 @@ export default {
         },
     },
     mounted() {
-        let admin = sessionStorage.getItem('access-user');
-        if (admin) {
-            admin = JSON.parse(admin);
-        }
-        this.AdminProfileForm = admin;
+//        let admin = sessionStorage.getItem('access-user');
+//        if (admin) {
+//            admin = JSON.parse(admin);
+//        }
+//        this.AdminProfileForm = accessUser;
+//        this.AdminProfileForm=this.$store.getters.accessUser;
+//        console.log(this.AdminProfileForm);
 
     }
 }

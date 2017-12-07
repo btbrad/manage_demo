@@ -16,6 +16,7 @@
 </template>
 
 <script>
+import {mapGetters} from 'vuex'
 import {reqLogin,reqChangeAdminPW} from '../api/api'
 
 export default {
@@ -35,7 +36,7 @@ export default {
             }, 1000);
         };
         return{
-            LoginUser:'',
+//            LoginUser:'',
             formLabelWidth:'180px',
             pwform:{
                 oldPassword:'',
@@ -55,12 +56,17 @@ export default {
             }
         }
     },
+    computed:{
+        ...mapGetters([
+            'accessUser',
+        ])
+    },
     methods:{
         submitForm(formName) {
             this.$refs[formName].validate((valid) => {
                 if (valid) {
-                    let id = this.LoginUser.id;
-                    let username = this.LoginUser.username;
+                    let id = this.accessUser.id;
+                    let username = this.accessUser.username;
                     let password = this.pwform.oldPassword;
                     let newPassword = this.pwform.newPassword;
                     let params = {username,password};
@@ -108,11 +114,11 @@ export default {
         },
     },
     mounted(){
-        let admin = sessionStorage.getItem('access-user');
-        if (admin) {
-            admin = JSON.parse(admin);
-        }
-        this.LoginUser = admin;
+//        let admin = sessionStorage.getItem('access-user');
+//        if (admin) {
+//            admin = JSON.parse(admin);
+//        }
+//        this.LoginUser = admin;
     },
 }
 </script>

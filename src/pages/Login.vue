@@ -84,12 +84,22 @@
 //                            }
 //                        })
                         this.$store.dispatch('Login',this.loginForm).then((res) =>{
-                            this.$router.push({path:'/index'});
-                            this.$message({
-                                type: 'success',
-                                message: '登录成功跳转到首页...'
-                            });
-                            this.fullscreenLoading = false;
+                            console.log(res);
+                            let {code,msg} = res;
+                            if(code===200){
+                                this.$router.push({path:'/index'});
+                                this.$message({
+                                    type: 'success',
+                                    message: '登录成功跳转到首页...'
+                                });
+
+                            }else {
+                                this.$message({
+                                    type:'error',
+                                    message:msg
+                                });
+                                this.fullscreenLoading = false;
+                            }
                         })
                     } else {
                         console.log('error submit!!');

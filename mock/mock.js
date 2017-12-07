@@ -35,10 +35,33 @@ export default {
         });
 
         mock.onGet('/api/PlayerList').reply(config =>{
-            let mockPlayers = PlayerList;
+            console.log(config);
+            let mockPlayers=null;
+            let page = config.params.page;
+            let size = config.params.size;
+            console.log(page);
+            if(config.params!==''&&((config.params.id!==undefined)||(config.params.username!==undefined)||(config.params.sex!==undefined))){
+                let data = config.params;
+                let id=Number(data.id);
+                let username = data.username;
+                let sex = data.sex;
+                console.log(id+'...'+username);
+                mockPlayers = PlayerList.filter(player =>{
+                    if((player.id===id)||(player.username.indexOf(username)!==-1)||(player.sex===sex)){
+                        return true
+                    }else{
+                        return false
+                    }
+                });
+            }else {
+                mockPlayers=PlayerList;
+            }
+            console.log(mockPlayers);
+            let total = mockPlayers.length;
+            mockPlayers = mockPlayers.filter((u,index)=> index < size*page && index >= size * (page-1));
             return new Promise((resolve,reject) =>{
                 setTimeout(() =>{
-                    resolve([200,{players:mockPlayers}]);
+                    resolve([200,{total:total,players:mockPlayers}]);
                 },200);
             });
         });
